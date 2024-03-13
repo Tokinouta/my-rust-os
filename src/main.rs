@@ -3,12 +3,13 @@
 
 use core::arch::global_asm;
 use core::panic::PanicInfo;
+use io::uart_init;
 
-use uart::uart_init;
-
+mod mm;
 #[macro_use]
 mod io;
-mod uart;
+mod utils;
+mod sysregs;
 
 // This function is called on panic.
 #[panic_handler]

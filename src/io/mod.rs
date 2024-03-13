@@ -1,5 +1,8 @@
-use crate::uart::uart_send_string;
+use uart::uart_send_string;
 use core::fmt::{self, Write};
+
+mod uart;
+pub use uart::uart_init;
 
 struct Stdout;
 
