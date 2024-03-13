@@ -30,6 +30,12 @@ const U_IMSC_REG: u32 = U_BASE + 0x38;
 
 use core::ptr;
 
+fn delay(mut n: u32) {
+    while n > 0 {
+        n -= 1;
+    }
+}
+
 pub fn uart_send(c: u8) {
     loop {
         if unsafe { ptr::read_volatile(AUX_MU_LSR_REG as *const u32) } & 0x20 != 0 {
@@ -96,11 +102,5 @@ pub fn uart_init() {
 
         /* Finally, enable transmitter and receiver */
         ptr::write_volatile(AUX_MU_CNTL_REG as *mut u32, 3);
-    }
-}
-
-fn delay(mut n: u32) {
-    while n > 0 {
-        n -= 1;
     }
 }
