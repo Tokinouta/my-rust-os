@@ -7,7 +7,7 @@ const SECTION_SHIFT: u32 = PAGE_SHIFT + TABLE_SHIFT;
 const PAGE_SIZE: u32 = 1 << PAGE_SHIFT;
 const SECTION_SIZE: u32 = 1 << SECTION_SHIFT;
 
-const LOW_MEMORY: u16 = 2 * SECTION_SIZE as u16;
+pub const LOW_MEMORY: u32 = 2 * SECTION_SIZE;
 
 #[inline(always)]
 #[no_mangle]
