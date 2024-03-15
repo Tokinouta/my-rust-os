@@ -11,4 +11,9 @@ panic = "abort"
 [profile.release]
 panic = "abort"
 
+[features]
+default = ["mini_uart"]
+mini_uart = []
+pl_uart = []
+
 [dependencies]
