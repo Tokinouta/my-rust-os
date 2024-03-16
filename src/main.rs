@@ -10,6 +10,7 @@ mod mm;
 #[macro_use]
 mod io;
 mod utils;
+#[macro_use]
 mod sysregs;
 
 // This function is called on panic.
@@ -32,5 +33,8 @@ pub extern "C" fn rust_main() -> ! {
     println!("bootstacktop vaddr = 0x{:x}", bootstacktop as usize);
     println!("Welcome RararaOS!");
     println!("I am Gulaeer!");
+
+    println!("Current EL: {}.", sysregs::get_currentel());
+
     panic!("you want to do nothing!");
 }
