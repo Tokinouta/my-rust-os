@@ -4,7 +4,7 @@ use core::arch::asm;
 // SCTLR_EL1, System Control Register (EL1), Page 2654 of
 // AArch64-Reference-Manual.
 // ***************************************
-/* Common SCTLR_ELx flags. */
+// Common SCTLR_ELx flags.
 pub const SCTLR_ELx_DSSBS: u64 = 1 << 44;
 pub const SCTLR_ELx_ENIA: u64 = 1 << 31;
 pub const SCTLR_ELx_ENIB: u64 = 1 << 30;

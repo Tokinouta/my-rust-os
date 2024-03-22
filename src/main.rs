@@ -3,15 +3,17 @@
 #![feature(asm_const)]
 
 use core::panic::PanicInfo;
+
+use arch::sysregs;
 use io::uart_init;
 
+#[macro_use]
+mod arch;
 mod boot;
 mod mm;
 #[macro_use]
 mod io;
 mod utils;
-#[macro_use]
-mod sysregs;
 
 // This function is called on panic.
 #[panic_handler]

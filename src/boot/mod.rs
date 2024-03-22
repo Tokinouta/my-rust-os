@@ -1,5 +1,5 @@
 use crate::mm;
-use crate::sysregs;
+use crate::arch::sysregs;
 use core::arch::global_asm;
 
 global_asm!(
