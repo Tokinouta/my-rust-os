@@ -1,0 +1,45 @@
+use core::mem;
+
+#[repr(C)]
+pub struct pt_regs {
+    pub regs: [u64; 31],
+    pub sp: u64,
+    pub pc: u64,
+    pub pstate: u64,
+    pub orig_x0: u64,
+    pub syscallno: u32,
+    pub unused2: u32,
+    pub orig_addr_limit: u64,
+    pub unused: u64,
+    pub stackframe: [u64; 2],
+}
+
+pub const S_FRAME_SIZE: usize = mem::size_of::<pt_regs>();
+pub const S_X0: usize = mem::offset_of!(pt_regs, regs) + 0 * mem::size_of::<u64>();
+pub const S_X1: usize = mem::offset_of!(pt_regs, regs) + 1 * mem::size_of::<u64>();
+pub const S_X2: usize = mem::offset_of!(pt_regs, regs) + 2 * mem::size_of::<u64>();
+pub const S_X3: usize = mem::offset_of!(pt_regs, regs) + 3 * mem::size_of::<u64>();
+pub const S_X4: usize = mem::offset_of!(pt_regs, regs) + 4 * mem::size_of::<u64>();
+pub const S_X5: usize = mem::offset_of!(pt_regs, regs) + 5 * mem::size_of::<u64>();
+pub const S_X6: usize = mem::offset_of!(pt_regs, regs) + 6 * mem::size_of::<u64>();
+pub const S_X7: usize = mem::offset_of!(pt_regs, regs) + 7 * mem::size_of::<u64>();
+pub const S_X8: usize = mem::offset_of!(pt_regs, regs) + 8 * mem::size_of::<u64>();
+pub const S_X10: usize = mem::offset_of!(pt_regs, regs) + 10 * mem::size_of::<u64>();
+pub const S_X12: usize = mem::offset_of!(pt_regs, regs) + 12 * mem::size_of::<u64>();
+pub const S_X14: usize = mem::offset_of!(pt_regs, regs) + 14 * mem::size_of::<u64>();
+pub const S_X16: usize = mem::offset_of!(pt_regs, regs) + 16 * mem::size_of::<u64>();
+pub const S_X18: usize = mem::offset_of!(pt_regs, regs) + 18 * mem::size_of::<u64>();
+pub const S_X20: usize = mem::offset_of!(pt_regs, regs) + 20 * mem::size_of::<u64>();
+pub const S_X22: usize = mem::offset_of!(pt_regs, regs) + 22 * mem::size_of::<u64>();
+pub const S_X24: usize = mem::offset_of!(pt_regs, regs) + 24 * mem::size_of::<u64>();
+pub const S_X26: usize = mem::offset_of!(pt_regs, regs) + 26 * mem::size_of::<u64>();
+pub const S_X28: usize = mem::offset_of!(pt_regs, regs) + 28 * mem::size_of::<u64>();
+pub const S_FP: usize = mem::offset_of!(pt_regs, regs) + 29 * mem::size_of::<u64>();
+pub const S_LR: usize = mem::offset_of!(pt_regs, regs) + 30 * mem::size_of::<u64>();
+pub const S_SP: usize = mem::offset_of!(pt_regs, sp);
+pub const S_PSTATE: usize = mem::offset_of!(pt_regs, pstate);
+pub const S_PC: usize = mem::offset_of!(pt_regs, pc);
+pub const S_ORIG_X0: usize = mem::offset_of!(pt_regs, orig_x0);
+pub const S_SYSCALLNO: usize = mem::offset_of!(pt_regs, syscallno);
+pub const S_ORIG_ADDR_LIMIT: usize = mem::offset_of!(pt_regs, orig_addr_limit);
+pub const S_STACKFRAME: usize = mem::offset_of!(pt_regs, stackframe);

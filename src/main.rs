@@ -13,6 +13,7 @@ mod boot;
 mod mm;
 #[macro_use]
 mod io;
+mod kernel;
 mod utils;
 
 // This function is called on panic.

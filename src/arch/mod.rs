@@ -1,5 +1,5 @@
 pub mod arch_local_regs;
-pub mod irq;
+pub mod kernel;
 pub mod sysregs;
 pub mod timer;
 
