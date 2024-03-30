@@ -60,6 +60,10 @@ el2_entry:
     eret
 
 el1_entry:
+    ldr     x5, =vectors
+    msr     vbar_el1, x5
+    isb
+
     // adr x0, ebss
     // adr x1, sbss
     // sub x1, x1, x0

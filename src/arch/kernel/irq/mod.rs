@@ -1,4 +1,17 @@
-use core::arch::{asm, global_asm};
+use core::{
+    arch::{asm, global_asm},
+    ptr,
+};
+
+use crate::{
+    arch::{
+        arch_local_regs::{ARM_LOCAL_IRQ_SOURCE0, CNT_PNS_IRQ},
+        PBASE,
+    },
+    println,
+};
+
+use super::timer::handle_timer_irq;
 
 global_asm!(
     include_str!("entry.S"),
@@ -6,9 +19,6 @@ global_asm!(
     S_FRAME_SIZE = const super::traps::S_FRAME_SIZE,
     S_PC = const super::traps::S_PC,
 );
-
-
-use crate::arch::PBASE;
 
 pub const IRQ_BASIC_PENDING: u32 = PBASE + 0x0000B200;
 pub const IRQ_PENDING_1: u32 = PBASE + 0x0000B204;
@@ -36,15 +46,27 @@ pub const LOCAL_TIMER_INT: u32 = 1 << 11;
 pub const CNTPNSIRQ_Int: u32 = 1 << 1;
 
 #[inline(always)]
-fn arch_local_irq_enable() {
+pub fn arch_local_irq_enable() {
     unsafe {
         asm!("msr daifclr, #2", options(nomem, nostack));
     }
 }
 
 #[inline(always)]
-fn arch_local_irq_disable() {
+pub fn arch_local_irq_disable() {
     unsafe {
         asm!("msr daifset, #2", options(nomem, nostack));
+    }
+}
+
+#[no_mangle]
+pub fn irq_handle() {
+    let irq: u32 = unsafe { ptr::read_volatile(ARM_LOCAL_IRQ_SOURCE0 as *const u32) };
+
+    match irq {
+        CNT_PNS_IRQ => handle_timer_irq(),
+        _ => {
+            println!("Unknown pending irq: {:x}", irq);
+        }
     }
 }

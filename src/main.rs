@@ -7,6 +7,8 @@ use core::panic::PanicInfo;
 use arch::sysregs;
 use io::uart_init;
 
+use crate::arch::kernel::{irq::arch_local_irq_enable, timer::timer_init};
+
 #[macro_use]
 mod arch;
 mod boot;
@@ -36,8 +38,10 @@ pub extern "C" fn rust_main() -> ! {
     println!("bootstacktop vaddr = 0x{:x}", bootstacktop as usize);
     println!("Welcome RararaOS!");
     println!("I am Gulaeer!");
-
     println!("Current EL: {}.", sysregs::get_currentel());
+
+    timer_init();
+    arch_local_irq_enable();
 
     panic!("you want to do nothing!");
 }
