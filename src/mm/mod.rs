@@ -24,4 +24,3 @@ pub fn memzero(mut src: *mut u64, mut n: usize) {
         );
     }
 }
-

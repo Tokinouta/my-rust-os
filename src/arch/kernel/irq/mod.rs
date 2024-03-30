@@ -7,8 +7,7 @@ use crate::{
     arch::{
         arch_local_regs::{ARM_LOCAL_IRQ_SOURCE0, CNT_PNS_IRQ},
         PBASE,
-    },
-    println,
+    }, lib::readl, println
 };
 
 use super::timer::handle_timer_irq;
@@ -61,7 +60,7 @@ pub fn arch_local_irq_disable() {
 
 #[no_mangle]
 pub fn irq_handle() {
-    let irq: u32 = unsafe { ptr::read_volatile(ARM_LOCAL_IRQ_SOURCE0 as *const u32) };
+    let irq: u32 = readl(ARM_LOCAL_IRQ_SOURCE0);
 
     match irq {
         CNT_PNS_IRQ => handle_timer_irq(),

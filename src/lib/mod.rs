@@ -1,4 +1,4 @@
-use core::arch::asm;
+use core::{arch::asm, ptr};
 
 #[inline(always)]
 #[no_mangle]
@@ -31,4 +31,14 @@ pub unsafe extern "C" fn delay(mut count: u32) {
           bne 1b",
         inout(reg) count,
     );
+}
+
+#[inline(always)]
+pub fn readl(addr: u32) -> u32 {
+    unsafe { ptr::read_volatile(addr as *const u32) }
+}
+
+#[inline(always)]
+pub fn writel(addr: u32, val: u32) {
+    unsafe { ptr::write_volatile(addr as *mut u32, val) };
 }

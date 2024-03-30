@@ -1,5 +1,6 @@
 use core::ptr;
 
+use crate::lib::writel;
 use crate::println;
 use crate::{
     arch::arch_local_regs::{CNT_PNS_IRQ, TIMER_CNTRL0},
@@ -64,7 +65,7 @@ fn generic_timer_reset(val: u64) -> i32 {
 }
 
 fn enable_timer_interrupt() {
-    unsafe { ptr::write_volatile(TIMER_CNTRL0 as *mut u32, CNT_PNS_IRQ) };
+    writel(TIMER_CNTRL0, CNT_PNS_IRQ);
 }
 
 pub fn timer_init() {

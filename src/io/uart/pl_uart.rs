@@ -1,4 +1,4 @@
-use crate::io::uart::*;
+use crate::{io::uart::*, lib::{readl, writel}};
 use core::ptr;
 
 pub const U_BASE: u32 = PBASE + 0x00201000;
@@ -12,14 +12,14 @@ pub const U_IMSC_REG: u32 = U_BASE + 0x38;
 
 pub fn uart_send(c: u8) {
     // wait for transmit FIFO to have an available slot
-    while unsafe { ptr::read_volatile(U_FR_REG as *const u32) } & 0x20 != 0 {}
-    unsafe { ptr::write_volatile(U_DATA_REG as *mut u32, c as u32) };
+    while readl(U_FR_REG) & 0x20 != 0 {}
+    writel(U_DATA_REG, c as u32);
 }
 
 pub fn uart_recv() -> u8 {
     // wait for receive FIFO to have data to read
-    while unsafe { ptr::read_volatile(U_FR_REG as *const u32) } & 0x10 != 0 {}
-    unsafe { (ptr::read_volatile(U_DATA_REG as *const u32) & 0xFF) as u8 }
+    while readl(U_FR_REG) & 0x10 != 0 {}
+    readl(U_DATA_REG) as u8
 }
 
 pub fn uart_send_string(str: &str) {
@@ -29,22 +29,22 @@ pub fn uart_send_string(str: &str) {
 }
 
 pub fn uart_init() {
-    let mut selector = unsafe { ptr::read_volatile(GPFSEL1 as *const u32) };
+    let mut selector = readl(GPFSEL1);
     selector &= !(7 << 12); // Clean gpio14
     selector |= 4 << 12; // Set alt0 for gpio14
     selector &= !(7 << 15); // Clean gpio15
     selector |= 4 << 15; // Set alt0 for gpio15
     unsafe {
-        ptr::write_volatile(GPFSEL1 as *mut u32, selector);
+        writel(GPFSEL1, selector);
 
-        ptr::write_volatile(GPPUD as *mut u32, 0);
+        writel(GPPUD, 0);
         delay(150);
-        ptr::write_volatile(GPPUDCLK0 as *mut u32, (1 << 14) | (1 << 15));
+        writel(GPPUDCLK0, (1 << 14) | (1 << 15));
         delay(150);
-        ptr::write_volatile(GPPUDCLK0 as *mut u32, 0);
+        writel(GPPUDCLK0, 0);
 
         // Disable UART until configuration is done
-        ptr::write_volatile(U_CR_REG as *mut u32, 0);
+        writel(U_CR_REG, 0);
 
         /*
          * baud divisor = UARTCLK / (16 * baud_rate)
@@ -57,18 +57,18 @@ pub fn uart_init() {
          */
 
         // Baud rate divisor, integer part
-        ptr::write_volatile(U_IBRD_REG as *mut u32, 26);
+        writel(U_IBRD_REG, 26);
 
         // Baud rate divisor, fractional part
-        ptr::write_volatile(U_FBRD_REG as *mut u32, 3);
+        writel(U_FBRD_REG, 3);
 
         // Enable FIFOs and 8-bit frames
-        ptr::write_volatile(U_LCRH_REG as *mut u32, (1 << 4) | (3 << 5));
+        writel(U_LCRH_REG, (1 << 4) | (3 << 5));
 
         // Mask interrupts
-        ptr::write_volatile(U_IMSC_REG as *mut u32, 0);
+        writel(U_IMSC_REG, 0);
 
         // Enable UART, receive, and transmit
-        ptr::write_volatile(U_CR_REG as *mut u32, 1 | (1 << 8) | (1 << 9));
+        writel(U_CR_REG, 1 | (1 << 8) | (1 << 9));
     }
 }
